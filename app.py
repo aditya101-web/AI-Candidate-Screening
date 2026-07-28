@@ -342,11 +342,13 @@ Responsibilities:
         # Interview Scheduler
         # =====================================
         st.divider()
-        st.subheader("📅 Interview Scheduler")
+        st.subheader("🗓️ Interview Scheduler")
 
         if not final_df.empty and "name" in final_df.columns:
+
             selected_candidate = st.selectbox(
-                "Select Candidate", final_df["name"]
+                "Select Candidate",
+                final_df["name"]
             )
 
             candidate_row = final_df[
@@ -356,14 +358,18 @@ Responsibilities:
             interview_date = st.date_input("Interview Date")
             interview_time = st.time_input("Interview Time")
 
-            if st.button("📅 Schedule Interview"):
+            if st.button("🗓️ Schedule Interview"):
+
                 candidate_email = candidate_row.get("email")
 
                 if not candidate_email or pd.isna(candidate_email):
                     st.error("❌ Selected candidate does not have a valid email address.")
+
                 else:
                     with st.spinner("Scheduling Interview..."):
+
                         try:
+
                             meet_link = schedule_interview(
                                 candidate_name=candidate_row["name"],
                                 candidate_email=str(candidate_email).strip(),
@@ -375,8 +381,28 @@ Responsibilities:
                             st.write("### 🎥 Google Meet Link")
                             st.code(meet_link)
 
+                        except FileNotFoundError:
+
+                            st.info("""
+### 📅 Interview Scheduler
+
+The Interview Scheduler is available only in the **local version** of this project.
+
+**Reason:**
+Google Calendar integration requires secure OAuth credentials (`credentials.json`), which are intentionally **not included** in the public GitHub repository or Streamlit deployment for security reasons.
+
+✅ All AI-powered features continue to work normally:
+- Resume Screening
+- AI Resume Scoring
+- GitHub Analysis
+- Candidate Ranking
+- Email Recommendations
+
+To test Interview Scheduling, please run the project locally.
+""")
+
                         except Exception as e:
-                            st.error(f"❌ Failed to schedule interview: {e}")
+                            st.error(f"❌ Failed to schedule interview.\n\n{e}")
 
         # =====================================
         # Candidate Scores Bar Chart
