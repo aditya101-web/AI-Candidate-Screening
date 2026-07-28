@@ -1,0 +1,18 @@
+# Environment Variables
+.env
+
+# Google OAuth
+credentials.json
+token.json
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# VS Code
+.vscode/
+
+# OS Files
+.DS_Store
+Thumbs.db
